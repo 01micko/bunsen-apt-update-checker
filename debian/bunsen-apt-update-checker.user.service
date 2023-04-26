@@ -1,0 +1,6 @@
+[Unit]
+Description=Check for available apt upgrades
+
+[Service]
+Type=oneshot
+ExecStart=apt-update-check

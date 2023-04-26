@@ -1,0 +1,5 @@
+bunsen-apt-update-checker (12.0-1) boron; urgency=medium
+
+  * Initial release.
+
+ -- John Crawley <john@bunsenlabs.org>  Wed, 26 Apr 2023 15:24:14 +0900

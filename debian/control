@@ -1,0 +1,22 @@
+Source: bunsen-apt-update-checker
+Section: misc
+Priority: optional
+Maintainer: John Crawley <john@bunsenlabs.org>
+Build-Depends: debhelper-compat (= 13), help2man
+Rules-Requires-Root: no
+Standards-Version: 4.6.1.0
+Homepage: https://github.com/BunsenLabs/bunsen-apt-update-checker
+Vcs-Git: https://github.com/BunsenLabs/bunsen-apt-update-checker.git
+Vcs-Browser: https://github.com/BunsenLabs/bunsen-apt-update-checker
+
+Package: bunsen-apt-update-checker
+Architecture: all
+Depends: ${misc:Depends},
+  systemd,
+  yad
+Description: utility to check for available package upgrades
+ A script and timer to check if package upgrades are available,
+ and, if so, to let the user inspect them in a terminal before
+ taking their preferred action.
+ .
+ The actual apt upgrade process is not handled at all.
