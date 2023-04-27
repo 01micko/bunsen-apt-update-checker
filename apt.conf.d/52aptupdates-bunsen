@@ -1,0 +1,9 @@
+// This should be enabled by default anyway.
+APT::Periodic::Enable "1";
+
+// Do "apt-get update" automatically every n-days (0=disable)
+APT::Periodic::Update-Package-Lists "1";
+
+// This option would require the package unattended-upgrades.
+APT::Periodic::Unattended-Upgrade "0";
+
