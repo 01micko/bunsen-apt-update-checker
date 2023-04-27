@@ -1,45 +1,8 @@
 bunsen-apt-update-checker
 =========================
 
-BLOB is a BunsenLabs GUI Themes Manager
-to save or restore various GUI theme settings.
+This is a utility to check if package upgrades are available,
+and, if so, to let the user inspect them in a terminal before
+taking their preferred action.
 
-The command to run is bl-obthemes
-
-Save options are for:
-		Openbox theme
-		GTK theme
-		Icon theme
-		Conky(s)
-		Tint2(s)
-		Background (using nitrogen, feh, xfdesktop or pcmanfm)
-		Alt Menu (dmenu)
-		Lightdm login gtk greeter
-		X configs (.bashrc, .Xresources)
-		Terminal emulator config (if available)
-		Compositor (if available)
-		Jgmenu theming (if available)
-
-Paths are assumed to be BunsenLabs defaults.
-
-A Screenshot is saved (Windows are hidden briefly so the image
-                       is the bare desktop, with any Tint2s
-                       or Conkys which are running, and a representive
-                       menu and lxappearance open)
-
-User saved themes are stored in ~/.config/blob.
-Some system preset themes are stored in /usr/share/bunsen/utilities/blob.
-The contents of that directory will be displayed to the user
-along with any that might be in ~/.config/blob.
-If a user and preset theme have identical names,
-the system preset will be hidden.
-
-****************************************************************************
-KNOWN ISSUES:
-Virtualbox does not let the guest move the host mouse cursor with xdotool,
-so the screenshot may display the theme incorrectly or with poor positioning.
-A workaround is to move the cursor to some free space,
-and use the "Enter" key in the "Configurations to be saved:" dialog.
-
-Conkys in non-default directories can be saved,
-but might not be seen when running bl-conky-manager.
+The actual apt upgrade process is not handled at all.
