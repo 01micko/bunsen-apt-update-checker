@@ -1,4 +1,16 @@
-bunsen-apt-update-checker (12.0-1) boron; urgency=medium
+bunsen-apt-update-checker (12.0-1~test3) boron; urgency=medium
+
+  * Add some help messages, clean up code.
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 27 Apr 2023 16:30:19 +0900
+
+bunsen-apt-update-checker (12.0-1~test2) boron; urgency=medium
+
+  * Replace systemd timer with apt trigger.
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 27 Apr 2023 15:21:20 +0900
+
+bunsen-apt-update-checker (12.0-1~test1) boron; urgency=medium
 
   * Initial release.
 
