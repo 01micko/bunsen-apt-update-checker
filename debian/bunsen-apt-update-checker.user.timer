@@ -1,9 +1,0 @@
-[Unit]
-Description=Run apt-update-check daily and on boot
-
-[Timer]
-OnStartupSec=10min
-OnUnitActiveSec=1day
-
-[Install]
-WantedBy=timers.target

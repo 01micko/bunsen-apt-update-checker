@@ -7,3 +7,16 @@ APT::Periodic::Update-Package-Lists "1";
 // This option would require the package unattended-upgrades.
 APT::Periodic::Unattended-Upgrade "0";
 
+// THESE COMMANDS ARE USED TO TRIGGER bl-apt-update-check
+// WHENEVER UPDATE-INFO MIGHT HAVE CHANGED
+
+// Whenever dpkg is called we might have different updates
+// i.e. if an user removes a package that had an update
+DPkg::Post-Invoke {
+"/usr/bin/test -x /usr/bin/bl-notify-broadcast-new && /usr/bin/test -x /usr/bin/bl-apt-update-check && /usr/bin/bl-notify-broadcast-new  /usr/bin/bl-apt-update-check || true";
+};
+
+// When Apt's cache is updated (i.e. apt-cache update)
+APT::Update::Post-Invoke-Success {
+"/usr/bin/test -x /usr/bin/bl-notify-broadcast-new && /usr/bin/test -x /usr/bin/bl-apt-update-check && /usr/bin/bl-notify-broadcast-new  /usr/bin/bl-apt-update-check || true";
+};
