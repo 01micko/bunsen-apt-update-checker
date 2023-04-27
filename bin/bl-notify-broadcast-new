@@ -1,8 +1,15 @@
 #!/bin/bash
 
-HELP="Call notify-send for all current X users.
-Passed arguments (message, icon etc) are sent on as-is.
-With -c or --command, substitute another command for notify-send.
+HELP="bl-notify-broadcast is a script to run a command for all current X users.
+By default, notify-send is run, and passed arguments (message, icon etc) 
+are sent on as-is. Any other command can be used.
+
+Usage: bl-notify-broadcast [-c|--command <command>] <arguments>
+
+Optional arguments:
+    -h | --help    Show this message
+    -c | --command <command>    Run <command> instead of notify-send
+
 This script must be run as root."
 
 error_exit() {
