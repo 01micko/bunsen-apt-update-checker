@@ -4,6 +4,7 @@ Source: https://github.com/BunsenLabs/bunsen-apt-update-checker
 
 Files: *
 Copyright: 2023 John Crawley <john@bunsenlabs.org>
+           2023 David Wyckoff <sleekmason@gmail.com>
 License: GPL-3.0+
 
 Files: debian/*
