@@ -12,7 +12,6 @@ Vcs-Browser: https://github.com/BunsenLabs/bunsen-apt-update-checker
 Package: bunsen-apt-update-checker
 Architecture: all
 Depends: ${misc:Depends},
-  systemd,
   yad
 Description: utility to check for available package upgrades
  A script and timer to check if package upgrades are available,
