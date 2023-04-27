@@ -14,7 +14,7 @@ Architecture: all
 Depends: ${misc:Depends},
   yad
 Description: utility to check for available package upgrades
- A script and timer to check if package upgrades are available,
+ A script and apt configuration to check if package upgrades are available,
  and, if so, to let the user inspect them in a terminal before
  taking their preferred action.
  .
