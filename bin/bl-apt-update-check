@@ -1,0 +1,34 @@
+#!/bin/bash
+
+on_exit() {
+    echo "quit" >&3
+    rm -f "${PIPE}"
+    rm -rf "${PIPE%/*}"
+    exec 3>&-
+}
+trap on_exit EXIT
+
+if [[ $1 = '--show-upgrades' ]]
+then
+    PIPE="$2"
+    [[ -p "$PIPE" ]] || { echo "${0}: there is no fifo $PIPE" >&2 ; exit 1;}
+    exec 3<> "$PIPE"
+    x-terminal-emulator -T 'Available Package Upgrades' -e sh -c 'printf "%s\n" "Available upgrades:"; apt list --upgradeable; printf "\n%s\n"  "Held packages:"; apt-mark showhold; bash;'
+    exit
+fi
+
+dir=$(mktemp --tmpdir --directory "${0##*/}".XXXXXXXX) || { echo "${0}: could not make temp dir" >&2 ; exit 1;}
+PIPE="${dir}/yadpipe"
+mkfifo "$PIPE" || { echo "${0}: could not make fifo $PIPE" >&2 ; exit 1;}
+exec 3<> "$PIPE"
+
+num_upgrades=$(( $( apt list --upgradable 2>/dev/null | wc -l ) - $( apt-mark showhold | wc -l ) -1 ))
+script="$( readlink -f "$0" )"
+if (( num_upgrades > 0 )); then
+    notify-send  -t 15000 --urgency low "$num_upgrades Upgrades(s) Currently Available"
+    yad --notification --listen --image="software-update-available" \
+    --text="Package Upgrades - Right-Click For Options" \
+    --menu="Show Available Upgrades!\"$script\" --show-upgrades \"$PIPE\"!applications-other|Quit!quit!application-exit" \
+    --command="notify-send  -t 15000 --urgency low '$num_upgrades Upgrades(s) Currently Available'" <&3
+fi
+
