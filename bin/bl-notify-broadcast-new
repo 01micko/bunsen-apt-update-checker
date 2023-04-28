@@ -1,10 +1,10 @@
 #!/bin/bash
 
-HELP="bl-notify-broadcast is a script to run a command for all current X users.
+HELP="bl-notify-broadcast-new is a script to run a command for all current X users.
 By default, notify-send is run, and passed arguments (message, icon etc)
 are sent on as-is. Any other command can be used.
 
-Usage: bl-notify-broadcast [-c|--command <command>] <arguments>
+Usage: bl-notify-broadcast-new [-c|--command <command>] <arguments>
 
 Optional arguments:
     -h | --help    Show this message
@@ -50,7 +50,9 @@ for u in "${!users[@]}"; do
 done
 
 for d in "${!displays[@]}";do
-    sudo -u "${displays[$d]}" DISPLAY="$d" bash -c " $(printf '%q ' "$cmd" "$@" ) & "
+	runuser -l "${displays[$d]}" -c "DISPLAY=:0 $(printf '%q ' "$cmd" "$@" ) &"
+#	runuser -u "${displays[$d]}" -- bash -c "DISPLAY=:0 $(printf '%q ' "$cmd" "$@" ) &"
+#    sudo -u "${displays[$d]}" DISPLAY="$d" bash -c " $(printf '%q ' "$cmd" "$@" ) & "
 done
 
 exit
