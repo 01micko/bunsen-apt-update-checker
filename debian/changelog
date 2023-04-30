@@ -1,3 +1,13 @@
+bunsen-apt-update-checker (12.0-1~test4) boron; urgency=medium
+
+  * Improve checker script to ensure only one icon is displayed.
+  * Change bl-run-broadcast to disown child processes so calling scripts
+     do not hang.
+  * Run checker immediately after install.
+  * Restore systemd timer - it is added to the apt trigger.
+
+ -- John Crawley <john@bunsenlabs.org>  Sun, 30 Apr 2023 17:09:15 +0900
+
 bunsen-apt-update-checker (12.0-1~test3) boron; urgency=medium
 
   * Add some help messages, clean up code.
