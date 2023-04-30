@@ -30,7 +30,7 @@ lockfile='/tmp/bl-apt-update-check-lock'
 exec 4<>"$lockfile"
 tries=3 # give up if cannot get lock
 (( i=1 ))
-until flock --verbose -n 4
+until flock -n 4 # http://mywiki.wooledge.org/BashFAQ/045
 do
     (( i > tries )) && { echo "${0}: failed to kill old process" >&2 ; exit 1;}
     echo "${0}: another instance is running, now killing it" >&2
