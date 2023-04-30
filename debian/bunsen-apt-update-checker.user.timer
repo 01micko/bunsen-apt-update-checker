@@ -1,0 +1,9 @@
+[Unit]
+Description=Run bl-apt-update-check 10min after login and daily thereafter.
+
+[Timer]
+OnStartupSec=10min
+OnUnitActiveSec=1day
+
+[Install]
+WantedBy=timers.target

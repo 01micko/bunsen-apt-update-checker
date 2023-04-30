@@ -13,9 +13,13 @@ Package: bunsen-apt-update-checker
 Architecture: all
 Depends: ${misc:Depends},
   yad
+Recommends: systemd
 Description: utility to check for available package upgrades
- A script and apt configuration to check if package upgrades are available,
- and, if so, to let the user inspect them in a terminal before
- taking their preferred action.
+ A script, timer and apt configuration to check if package upgrades
+ are available, notify the user and let them inspect them in a terminal
+ before taking their preferred action.
  .
  The actual apt upgrade process is not handled at all.
+ .
+ NOTE: Without systemd the timer will be inactive and
+ the notification will be triggered by apt updates only.
