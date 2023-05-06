@@ -25,6 +25,24 @@ on_exit() {
     :>"$lockfile" # lockfile only holds pid while script is running
 }
 
+# check if pid belongs to an instance of this script, even if run via a symlink
+# not perfect but should cover many cases, and error out otherwise
+check_pid() {
+    local pid=$1
+    local script path cmd
+    kill -s 0 "$pid" || { echo "${0}: PID ${pid} is not running" >&2 ; exit 1;}
+    script=$( readlink -e "$0" ) || { echo "${0}: failed to find path to this script" >&2 ; exit 1;}
+    mapfile -d '' -t cmd < "/proc/${pid}/cmdline"
+    path=${cmd[-1]} # this script takes no arguments, so it is the last part of the command line
+    if [[ $path = /* ]]
+    then
+        path=$(readlink -e "$path")
+    else
+        path=$( readlink -e /proc/"${pid}"/cwd/"$path" ) # assume path is relative to working directory
+    fi
+    [[ "$path" = "$script" ]] || { echo "${0}: PID ${pid} seems to belong to a different process: ${path}" >&2 ; exit 1;}
+}
+
 # If there is a previous icon still not closed, kill and replace it if still needed
 lockfile='/tmp/bl-apt-update-check-lock'
 exec 4<>"$lockfile"
@@ -35,6 +53,7 @@ do
     (( i > tries )) && { echo "${0}: failed to kill old process" >&2 ; exit 1;}
     echo "${0}: another instance is running, now killing it" >&2
     oldpid=$(<"$lockfile")
+    check_pid "$oldpid"
     kill "$oldpid"
     tail -f /dev/null --pid="$oldpid" # https://forums.bunsenlabs.org/viewtopic.php?pid=114592#p114592
     (( i++ )) # one repetition should be enough in fact
