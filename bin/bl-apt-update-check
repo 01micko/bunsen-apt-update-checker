@@ -1,4 +1,23 @@
 #!/bin/bash
+#
+#    bl-apt-update-check
+#    display apt update notifications
+#
+#    Copyright: 2023 John Crawley <john@bunsenlabs.org>
+#               2023 David Wyckoff <sleekmason@gmail.com>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 HELP="bl-apt-update-check is a script to check if package upgrades are available,
 and if so, display a notification and system tray icon to the user.
@@ -86,5 +105,5 @@ if (( num_upgrades > 0 )); then
     yad --notification --listen --image="software-update-available" \
     --text="Package Upgrades - Right-Click For Options" \
     --menu="Show Available Upgrades!bash -c show-upgrades!applications-other|Quit!quit!application-exit" \
-    --command="notify-send  -t 15000 --urgency low '$num_upgrades Upgrades(s) Currently Available'" <&3
+    --command="notify-send  -t 15000 --urgency normal '$num_upgrades Upgrades(s) Currently Available'" <&3
 fi
