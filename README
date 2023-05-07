@@ -6,3 +6,9 @@ and, if so, to let the user inspect them in a terminal before
 taking their preferred action.
 
 The actual apt upgrade process is not handled at all.
+
+The check is run 10 min after login, and every 24 hrs subsequently.
+The check is also triggered by dpkg or apt activity.
+The timer uses systemd, but the package will still function using
+the apt triggers only, so systemd is a Recommends, not a hard dependency.
+
