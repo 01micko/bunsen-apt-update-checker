@@ -79,8 +79,8 @@ for u in "${!users[@]}"; do
 done
 
 for d in "${!displays[@]}";do
-	runuser -l "${displays[$d]}" --shell /usr/bin/bash -c "set -m; DISPLAY=:0 $(printf '%q ' "$@" ) >/dev/null 2>&1 & disown; set +m;"
-#	runuser -u "${displays[$d]}" -- bash -c "set -m; DISPLAY=:0 $(printf '%q ' "$@" ) >/dev/null 2>&1 & disown; set +m;"
+	runuser -l "${displays[$d]}" --shell /usr/bin/bash -c "set -m; DISPLAY=${d} XDG_RUNTIME_DIR=/run/user/$(id -u ${displays[$d]}) $(printf '%q ' "$@" ) >/dev/null 2>&1 & disown; set +m;"
+#	runuser -u "${displays[$d]}" -- bash -c "set -m; DISPLAY=${d} $(printf '%q ' "$@" ) >/dev/null 2>&1 & disown; set +m;"
 #    sudo -u "${displays[$d]}" DISPLAY="$d" bash -c " $(printf '%q ' "$@" ) & "
 done
 
