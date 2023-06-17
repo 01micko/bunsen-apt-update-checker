@@ -16,9 +16,13 @@ set -e
 
 case $1 in
 configure|abort-upgrade)
-    if command -v bl-run-broadcast >/dev/null && command -v bl-apt-update-check >/dev/null
+#    if command -v bl-run-broadcast >/dev/null && command -v bl-apt-update-check >/dev/null
+#    then
+#        bl-run-broadcast bl-apt-update-check
+#    fi
+    if command -v bl-run-broadcast >/dev/null && command -v systemctl >/dev/null
     then
-        bl-run-broadcast bl-apt-update-check
+        bl-run-broadcast systemctl --user start bunsen-apt-update-checker.timer
     fi
     ;;
 esac
