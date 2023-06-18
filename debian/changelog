@@ -1,3 +1,9 @@
+bunsen-apt-update-checker (12.1~test1-1) boron; urgency=medium
+
+  * Fix incorrect version number.
+
+ -- John Crawley <john@bunsenlabs.org>  Sun, 18 Jun 2023 10:28:10 +0900
+
 bunsen-apt-update-checker (12.0-1+test1) boron; urgency=medium
 
   * Start timer on install.
