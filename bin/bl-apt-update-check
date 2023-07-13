@@ -36,16 +36,16 @@ case $1 in
 esac
 
 on_exit() {
-    echo "quit" >&3
+    echo "quit" >&"$yad_fd" # close yad
     rm -f "${PIPE}"
     rm -rf "${PIPE%/*}"
-    exec 3>&-
-    exec 4>&-
+    exec "$yad_fd">&-
+    exec "$lockfile_fd">&-
     :>"$lockfile" # lockfile only holds pid while script is running
 }
 
-# check if pid belongs to an instance of this script, even if run via a symlink
-# not perfect but should cover many cases, and error out otherwise
+# Check if pid belongs to an instance of this script, even if run via a symlink.
+# Not perfect but should cover many cases, and error out otherwise.
 check_pid() {
     local pid=$1
     local script path cmd
@@ -62,12 +62,14 @@ check_pid() {
     [[ "$path" = "$script" ]] || { echo "${0}: PID ${pid} seems to belong to a different process: ${path}" >&2 ; exit 1;}
 }
 
+(( $(id -u) < 1000 )) && { echo "${0}: this script should only be run by a normal user" >&2 ; exit 1;}
+
 # If there is a previous icon still not closed, kill and replace it if still needed
 lockfile='/tmp/bl-apt-update-check-lock'
-exec 4<>"$lockfile"
+exec {lockfile_fd}<>"$lockfile"
 tries=3 # give up if cannot get lock
 (( i=1 ))
-until flock -n 4 # http://mywiki.wooledge.org/BashFAQ/045
+until flock -n "$lockfile_fd" # http://mywiki.wooledge.org/BashFAQ/045
 do
     (( i > tries )) && { echo "${0}: failed to kill old process" >&2 ; exit 1;}
     echo "${0}: another instance is running, now killing it" >&2
@@ -85,7 +87,7 @@ trap on_exit EXIT
 show-upgrades(){
     trap on_exit EXIT
     [[ -p "$PIPE" ]] || { echo "${0}: there is no fifo $PIPE" >&2 ; exit 1;}
-    exec 3<> "$PIPE"
+    exec "$yad_fd"<> "$PIPE"
     x-terminal-emulator -T 'Available Package Upgrades' -e sh -c 'printf "%s\n" "Available upgrades:"; apt list --upgradeable; printf "\n%s\n"  "Held packages:"; apt-mark showhold; bash;'
     exit
 }
@@ -93,7 +95,7 @@ show-upgrades(){
 dir=$(mktemp --tmpdir --directory "${0##*/}".XXXXXXXX) || { echo "${0}: could not make temp dir" >&2 ; exit 1;}
 PIPE="${dir}/yadpipe"
 mkfifo "$PIPE" || { echo "${0}: could not make fifo $PIPE" >&2 ; exit 1;}
-exec 3<> "$PIPE"
+exec {yad_fd}<> "$PIPE"
 
 export PIPE
 export -f on_exit
@@ -105,5 +107,5 @@ if (( num_upgrades > 0 )); then
     yad --notification --listen --image="software-update-available" \
     --text="Package Upgrades - Right-Click For Options" \
     --menu="Show Available Upgrades!bash -c show-upgrades!applications-other|Quit!quit!application-exit" \
-    --command="notify-send  -t 15000 --urgency normal '$num_upgrades Upgrades(s) Currently Available'" <&3
+    --command="notify-send  -t 15000 --urgency normal '$num_upgrades Upgrades(s) Currently Available'" <&"$yad_fd"
 fi
