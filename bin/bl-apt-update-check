@@ -41,7 +41,7 @@ on_exit() {
     rm -rf "${PIPE%/*}"
     exec "$yad_fd">&-
     exec "$lockfile_fd">&-
-    :>"$lockfile" # lockfile only holds pid while script is running
+    :>"$lockfile" # lockfile holds pid while script is running, otherwise empty
 }
 
 # Check if pid belongs to an instance of this script, even if run via a symlink.
@@ -65,7 +65,9 @@ check_pid() {
 (( $(id -u) < 1000 )) && { echo "${0}: this script should only be run by a normal user" >&2 ; exit 1;}
 
 # If there is a previous icon still not closed, kill and replace it if still needed
-lockfile='/tmp/bl-apt-update-check-lock'
+lockdir="/run/lock/$(id -u)"
+mkdir -p "$lockdir"
+lockfile="$lockdir/bl-apt-update-check-lock"
 exec {lockfile_fd}<>"$lockfile"
 tries=3 # give up if cannot get lock
 (( i=1 ))
