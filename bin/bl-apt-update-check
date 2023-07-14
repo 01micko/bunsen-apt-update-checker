@@ -62,13 +62,13 @@ check_pid() {
     [[ "$path" = "$script" ]] || { echo "${0}: PID ${pid} seems to belong to a different process: ${path}" >&2 ; exit 1;}
 }
 
-(( $(id -u) < 1000 )) && { echo "${0}: this script should only be run by a normal user" >&2 ; exit 1;}
+(( $(id -u) >= 1000 )) || { echo "${0}: this script should only be run by a normal user" >&2 ; exit 1;}
 
-# If there is a previous icon still not closed, kill and replace it if still needed
+# If there is a previous icon still not closed, kill it (and replace it if still needed).
 lockdir="/run/lock/$(id -u)"
 mkdir -p "$lockdir"
 lockfile="$lockdir/bl-apt-update-check-lock"
-exec {lockfile_fd}<>"$lockfile"
+exec {lockfile_fd}<>"$lockfile" ||  { echo "${0}: failed to set file descriptor '$lockfile_fd' to $lockfile" >&2 ; exit 1;}
 tries=3 # give up if cannot get lock
 (( i=1 ))
 until flock -n "$lockfile_fd" # http://mywiki.wooledge.org/BashFAQ/045
@@ -89,7 +89,7 @@ trap on_exit EXIT
 show-upgrades(){
     trap on_exit EXIT
     [[ -p "$PIPE" ]] || { echo "${0}: there is no fifo $PIPE" >&2 ; exit 1;}
-    exec "$yad_fd"<> "$PIPE"
+    exec "$yad_fd"<> "$PIPE" ||  { echo "${0}: show-upgrades(): failed to set file descriptor '$yad_fd' to $PIPE" >&2 ; exit 1;}
     x-terminal-emulator -T 'Available Package Upgrades' -e sh -c 'printf "%s\n" "Available upgrades:"; apt list --upgradeable; printf "\n%s\n"  "Held packages:"; apt-mark showhold; bash;'
     exit
 }
@@ -97,7 +97,7 @@ show-upgrades(){
 dir=$(mktemp --tmpdir --directory "${0##*/}".XXXXXXXX) || { echo "${0}: could not make temp dir" >&2 ; exit 1;}
 PIPE="${dir}/yadpipe"
 mkfifo "$PIPE" || { echo "${0}: could not make fifo $PIPE" >&2 ; exit 1;}
-exec {yad_fd}<> "$PIPE"
+exec {yad_fd}<> "$PIPE" ||  { echo "${0}: failed to set file descriptor '$yad_fd' to $PIPE" >&2 ; exit 1;}
 
 export PIPE
 export -f on_exit
