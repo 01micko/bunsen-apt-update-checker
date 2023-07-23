@@ -1,3 +1,14 @@
+bunsen-apt-update-checker (12.1-1) boron; urgency=medium
+
+  * bl-run-broadcast: do not broadcast to system users.
+  * bl-apt-update-check: do not run for system users.
+  * bl-apt-update-check: 
+    - Put separate user lockfiles in /run/lock/<id>/
+    - Let BASH choose the file descriptors.
+    - Add bugfixes, error checking and comments.
+
+ -- John Crawley <john@bunsenlabs.org>  Sun, 23 Jul 2023 18:20:31 +0900
+
 bunsen-apt-update-checker (12.1~test1-1) boron; urgency=medium
 
   * Fix incorrect version number.
