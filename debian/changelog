@@ -1,3 +1,9 @@
+bunsen-apt-update-checker (12.1.1-1) boron; urgency=medium
+
+  * bl-apt-update-check: prompt user before going to bash shell.
+
+ -- John Crawley <john@bunsenlabs.org>  Mon, 20 Nov 2023 16:17:13 +0900
+
 bunsen-apt-update-checker (12.1-1) boron; urgency=medium
 
   * bl-run-broadcast: do not broadcast to system users.
